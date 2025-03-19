@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学院新闻 - 现代科技大学</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+        }
+
+        .news-container {
+            min-height: 600px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        /* 左侧轮播样式 */
+        .carousel-section {
+            height: 600px;
+            position: relative;
+        }
+
+        .carousel-img {
+            height: 400px;
+            object-fit: cover;
+            filter: brightness(0.9);
+        }
+
+        .carousel-caption {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1.5rem;
+            border-radius: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            right: auto;
+            bottom: 80px;
+            width: 80%;
+        }
+
+        .carousel-indicators {
+            bottom: 30px;
+            margin: 0;
+        }
+
+        .carousel-indicators [data-bs-target] {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin: 0 8px;
+            border: 2px solid rgb(141, 141, 141);
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-indicators .active {
+            background-color: rgb(141, 141, 141);
+            transform: scale(1.2);
+        }
+
+        /* 右侧列表样式 */
+        .news-list {
+            height: 600px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .news-item {
+            padding: 1.2rem;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .news-item:hover {
+            background: rgba(231, 76, 60, 0.05);
+            transform: translateX(5px);
+        }
+
+        .news-time {
+            color: #95a5a6;
+            font-size: 0.85rem;
+        }
+
+        .news-list-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin: 5px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        /* 指示点点击动画 */
+        .click-animation {
+            animation: indicatorClick 0.3s ease;
+        }
+
+        @keyframes indicatorClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.8); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container my-5">
+    <h2 class="mb-4 fw-bold text-center">学院新闻</h2>
+
+    <div class="news-container shadow-lg">
+        <div class="row g-0">
+            <!-- 左侧轮播区 -->
+            <div class="col-md-8 carousel-section">
+                <div id="newsCarousel" class="carousel slide h-100" data-bs-ride="carousel">
+                    <!-- 指示点 -->
+                    <div class="carousel-indicators">
+                        <button type="button"
+                                data-bs-target="#newsCarousel"
+                                data-bs-slide-to="0"
+                                class="active"></button>
+                        <button type="button"
+                                data-bs-target="#newsCarousel"
+                                data-bs-slide-to="1"></button>
+                    </div>
+
+                    <div class="carousel-inner h-100">
+                        <!-- 轮播项1 -->
+                        <div class="carousel-item active h-100">
+                            <img src="https://picsum.photos/800/500" class="d-block w-100 carousel-img" alt="新闻图片">
+                            <div class="carousel-caption">
+                                <h4>人工智能国际论坛成功举办</h4>
+                                <p>来自20多个国家的专家齐聚我校，共同探讨AI技术新发展...</p>
+                                <span class="badge bg-danger">热点新闻</span>
+                            </div>
+                        </div>
+                        <!-- 轮播项2 -->
+                        <div class="carousel-item h-100">
+                            <img src="https://picsum.photos/801/500" class="d-block w-100 carousel-img" alt="新闻图片">
+                            <div class="carousel-caption">
+                                <h4>新校区建设进展顺利</h4>
+                                <p>占地面积200亩的新校区已完成主体建设，预计明年9月投入使用...</p>
+                                <span class="badge bg-success">校园建设</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 轮播控件 -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 右侧新闻列表 -->
+            <div class="col-md-4">
+                <div class="news-list">
+                    <!-- 新闻项 -->
+                    <div class="news-item">
+                        <div class="news-time">2024-03-22</div>
+                        <h5 class="news-list-title">计算机学院斩获国际编程大赛金奖</h5>
+                        <p class="text-muted small">在刚刚结束的ICPC国际大学生程序设计竞赛中...</p>
+                    </div>
+
+                    <div class="news-item">
+                        <div class="news-time">2024-03-21</div>
+                        <h5 class="news-list-title">校企合作签约仪式隆重举行</h5>
+                        <p class="text-muted small">与华为公司签订战略合作协议，共建联合实验室...</p>
+                    </div>
+
+                    <!-- 更多新闻项... -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // 增强指示点交互
+        $('#newsCarousel').on('slide.bs.carousel', function (e) {
+            const indicators = $(this).find('.carousel-indicators button');
+            indicators.eq(e.from).removeClass('active');
+            indicators.eq(e.to).addClass('active');
+        });
+
+        // 为指示点添加点击动画
+        $('.carousel-indicators button').click(function() {
+            $(this).addClass('click-animation');
+            setTimeout(() => $(this).removeClass('click-animation'), 300);
+        });
+
+        // 新闻列表点击事件
+        $('.news-item').click(function() {
+            const title = $(this).find('.news-list-title').text();
+            const content = $(this).find('p').text();
+
+            // 创建详情弹窗
+            const modal = new bootstrap.Modal($('#detailModal').length ? $('#detailModal') : $('<div/>', {
+                id: 'detailModal',
+                class: 'modal fade',
+                html: `
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">${title}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${content}
+                            <!-- 这里可以添加更多详细内容 -->
+                        </div>
+                    </div>
+                </div>
+            `
+            }).appendTo('body'));
+
+            modal.show();
+        });
+
+        // 轮播自动播放
+        $('#newsCarousel').carousel({
+            interval: 5000
+        });
+    });
+</script>
+
+</body>
+</html>
