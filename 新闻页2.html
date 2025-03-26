@@ -6,14 +6,67 @@
     <title>学院新闻 - 现代科技大学</title>
 
     <!-- 引入依赖 -->
-    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         /* 根变量定义 */
         :root {
             --primary-color: #2c3e50;  /* 主标题颜色 */
             --accent-color: #e74c3c;   /* 强调色 */
+        }
+
+        /* 标题栏样式 */
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 扁平化按钮样式 */
+        .flat-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 16px;
+            background: transparent;
+            border: none;
+            color: var(--accent-color) !important;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        /* 按钮悬停效果 */
+        .flat-btn:hover {
+            color: #c0392b !important;
+            transform: translateY(-1px);
+        }
+
+        /* 按钮下划线动画 */
+        .flat-btn::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .flat-btn:hover::after {
+            width: 100%;
+        }
+
+        /* 按钮图标样式 */
+        .flat-btn i {
+            margin-left: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .flat-btn:hover i {
+            transform: translateX(3px);
         }
 
         /* 新闻主容器样式 */
@@ -52,7 +105,7 @@
 
         /* 轮播指示点容器 */
         .carousel-indicators {
-            bottom: 30px;              /* 底部定位 */
+            bottom: 18px; /* 调整到文字下方 */
         }
 
         /* 单个指示点样式 */
@@ -73,18 +126,19 @@
 
         /* 新闻列表容器 */
         .news-list {
-            height: 600px;             /* 固定高度 */
-            overflow-y: auto;         /* 垂直滚动 */
+            display: flex;
+            flex-direction: column;
             padding: 20px;             /* 内边距 */
             background: white;         /* 白色背景 */
         }
 
         /* 单个新闻项样式 */
         .news-item {
-            padding: 1.2rem;          /* 内边距 */
+            padding: 0.8rem;          /* 内边距 */
             border-bottom: 1px solid #eee; /* 底部边框 */
             transition: all 0.3s;     /* 过渡效果 */
             cursor: pointer;          /* 手型光标 */
+            flex: 0 0 auto;
         }
 
         /* 新闻项悬停效果 */
@@ -124,13 +178,23 @@
                 padding: 1rem;       /* 减少内边距 */
                 bottom: 10px;         /* 调整底部间距 */
             }
+            .flat-btn {
+                padding: 5px 12px;
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container my-5">
-    <h2 class="mb-4 fw-bold text-center">学院新闻</h2>
+    <div class="title-bar">
+        <h2 class="fw-bold m-0">学院新闻</h2>
+        <button class="flat-btn more-btn">
+            More
+            <i class="bi bi-arrow-right" style="font-size: 1.1rem;"></i>
+        </button>
+    </div>
 
     <div class="news-container">
         <div class="row g-0">
@@ -166,20 +230,19 @@
 </div>
 
 <!-- 依赖脚本 -->
-<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery-3.1.1.js"></script>
+<script src="dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     // ======================
     // 数据初始化
     // ======================
     const staticData = (() => {
-        const carouselItems = [];
-        const listItems = [];
+        const newsItems = [];
 
-        // 生成3条轮播数据
-        for(let i = 1; i <= 3; i++) {
-            carouselItems.push({
+        // 生成20条新闻数据
+        for(let i = 1; i <= 20; i++) {
+            newsItems.push({
                 id: i,
                 date: `2024-03-${25 - i}`,
                 title: `轮播新闻标题 ${i}`,
@@ -188,17 +251,7 @@
             });
         }
 
-        // 生成20条列表数据
-        for(let i = 1; i <= 20; i++) {
-            listItems.push({
-                id: i + 3,  // 避免与轮播数据ID重复
-                date: `2024-03-${24 - (i % 25)}`,
-                title: `列表新闻标题 ${i}`,
-                content: `这是第 ${i} 条列表新闻的内容摘要，用于演示新闻列表的显示效果...`
-            });
-        }
-
-        return { carouselItems, listItems };
+        return newsItems;
     })();
 
     // ======================
@@ -217,13 +270,14 @@
         const $carousel = $('#newsCarousel');
         const $indicators = $carousel.find('.carousel-indicators');
         const $inner = $carousel.find('.carousel-inner');
+        const carouselElement = document.getElementById('newsCarousel');
 
         // 清空现有内容
         $indicators.empty();
         $inner.empty();
 
         // 生成轮播内容
-        staticData.carouselItems.forEach((item, index) => {
+        staticData.slice(0, 3).forEach((item, index) => {
             // 添加指示点
             $indicators.append(`
             <button type="button"
@@ -235,7 +289,7 @@
             // 添加轮播项
             $inner.append(`
             <div class="carousel-item ${index === 0 ? 'active' : ''} h-100">
-                <img src="${item.image}" class="d-block w-100 carousel-img" alt="${item.title}">
+                <img src="${item.image}" class="d-block w-100 carousel-img" alt="${item.title}" loading="lazy">
                 <div class="carousel-caption">
                     <div class="d-flex flex-column">
                         <small class="news-time text-white-50 mb-2">${item.date}</small>
@@ -244,11 +298,14 @@
                     </div>
                 </div>
             </div>
-        `);
+            `);
         });
 
-        // 初始化轮播组件
-        $carousel.carousel({ interval: 5000 });
+        // 初始化轮播
+        const carousel = new bootstrap.Carousel(carouselElement, {
+            interval: 5000,
+            ride: 'carousel'
+        });
     }
 
     // ======================
@@ -258,14 +315,14 @@
         const $list = $('.news-list');
         $list.empty(); // 清空现有内容
 
-        staticData.listItems.forEach(item => {
+        staticData.slice(3, 7).forEach(item => {
             $list.append(`
             <div class="news-item" data-id="${item.id}">
                 <div class="news-time">${item.date}</div>
                 <h5 class="news-list-title">${item.title}</h5>
                 <p class="text-muted small">${item.content}</p>
             </div>
-        `);
+            `);
         });
     }
 
@@ -276,54 +333,28 @@
         // 列表点击事件
         $('.news-list').on('click', '.news-item', function() {
             const id = $(this).data('id');
-            const item = [...staticData.carouselItems, ...staticData.listItems].find(i => i.id === id);
+            const item = staticData.find(i => i.id === id);
             showDetailModal(item);
         });
 
         // 轮播项点击事件
-        $('#newsCarousel').on('click', '.carousel-item', function() {
-            const index = $(this).index();
-            const item = staticData.carouselItems[index];
+        $('#newsCarousel').on('click', '.carousel-item img', function() {
+            const index = $(this).closest('.carousel-item').index();
+            const item = staticData[index];
             showDetailModal(item);
+        });
+
+        // 更多按钮点击事件
+        $('.more-btn').on('click', function() {
+            window.location.href = 'https://sxkxxy.usts.edu.cn/index/xyxw.htm';
         });
     }
 
     // ======================
-    // 显示详情弹窗
+    // 新闻点击跳转
     // ======================
     function showDetailModal(item) {
-        const modalContent = `
-        <div class="modal-header">
-            <h5 class="modal-title">${item.title}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                ${item.image ? `
-                <div class="col-md-6 mb-3">
-                    <img src="${item.image}" class="img-fluid rounded" alt="${item.title}">
-                </div>
-                ` : ''}
-                <div class="${item.image ? 'col-md-6' : 'col-12'}">
-                    <p class="text-muted small">发布日期：${item.date}</p>
-                    <p>${item.content}</p>
-                </div>
-            </div>
-        </div>
-    `;
-
-        const modal = new bootstrap.Modal($('<div/>', {
-            class: 'modal fade',
-            html: `
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    ${modalContent}
-                </div>
-            </div>
-        `
-        }).appendTo('body'));
-
-        modal.show();
+        alert("你好");
     }
 </script>
 
